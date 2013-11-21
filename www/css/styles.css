@@ -1,0 +1,22 @@
+@font-face {
+	font-family: mainFont;
+	/* src: url('fonts/ocrae.ttf'); */
+	src: url('fonts/horatiodmed.ttf');
+}
+
+#container * {
+	font-family: mainFont;
+}
+
+body {
+    font-family: source-sans-pro, serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    background-image: url(../images/grouping_game/background.png);
+    background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
