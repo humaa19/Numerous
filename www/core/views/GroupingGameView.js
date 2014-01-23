@@ -20,7 +20,6 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 			EXCEEDED_GOAL_NUMBER_WITH_PACKS : 4,
 		}	
 		
-		
 		// pack count
 		this.packCount = 0;
 		
@@ -54,6 +53,11 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		// create the egg ones group
 		this.onesWidgetGroup = new Kinetic.Group({});
 		app.layer.add(this.onesWidgetGroup);
+		
+		//Timing variables
+		this.startTime = new Date().getTime();
+		this.endTime = 0;
+		this.timeSpent = 0;
 	},
 	
 
@@ -288,6 +292,8 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 			var total = app.view.calculateTotal();
 			if (total == app.controller.goalNumber) {
 				app.view.finish(app.view.allowableErrorsCount - app.view.errorsMade);
+				// done button pressed event with no. of stars as event label
+				ga('send', 'event', 'doneButton', 'click', app.view.allowableErrorsCount - app.view.errorsMade);
 			} else {
 				app.view.shakeHead();
 				app.view.errorMade(app.view.ERROR_TYPES.INCORRECT_DONE);	
@@ -973,33 +979,45 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 	},
 
 	/**
-	 * Finsih the game. Score: 0 for fail, 1 to 3 for stars
+	 * Finish the game. Score: 0 for fail, 1 to 3 for stars
 	 */
 	finish : function(score) {
 		var finishTitleImage = null;
 		var starsImage = null;
 		var starsCount = 0;
 		
+		//ga('send', 'event', 'doneButton', 'click', score);
+		
+		// calculate time spent on level - sends but doesn't show up on site...
+		this.endTime = new Date().getTime();
+		this.timeSpent = this.endTime - this.startTime;
+		console.log("Time calculated: " + this.timeSpent);
+		ga('send', 'timing', 'latency', 'levelNo', this.timeSpent);
+		
 		switch(score) {
 			case 0:
 				finishTitleImage = this.images.labelTryAgain;
 				starsImage = null;
 				starsCount = 0;
+				//ga('send', 'event', 'attempted', 'click', 'noStars');
 			break;
 			case 1:
 				finishTitleImage = this.images.labelGood;
 				starsImage = this.images.star1;
 				starsCount = 1;
+				//ga('send', 'event', 'completed', 'click', 'oneStar');
 			break;
 			case 2:
 				finishTitleImage = this.images.labelExcellent;
 				starsImage = this.images.star2;
 				starsCount = 2;
+				//ga('send', 'event', 'completed', 'click', 'twoStars');
 			break;			
 			case 3:
 				finishTitleImage = this.images.labelPerfect;
 				starsImage = this.images.star3;
 				starsCount = 3;
+				//ga('send', 'event', 'completed', 'click', 'threeStars');
 			break;
 		}
 
@@ -1109,8 +1127,6 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		
 		// set the stars
 		app.controller.achievedStars(starsCount);
-		
-		
 		
 	},
 });

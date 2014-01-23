@@ -46,6 +46,10 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		this.allowableErrorsCount = 3;
 		
 		this.boxesInGroup = [];
+		
+		//WORKS! It sends and page view for every time its called!
+		//ga('send', 'pageview');
+
 	},
 
 
@@ -844,7 +848,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 	},
 
 	/**
-	 * upause the game
+	 * unpause the game
 	 */
 	unpause : function() {
 		this.pauseWidgetsGroup.hide();
@@ -885,7 +889,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 	},
 
 	/**
-	 * Finsih the game. Score: 0 for fail, 1 to 3 for stars
+	 * Finish the game. Score: 0 for fail, 1 to 3 for stars
 	 * @param {integer} score the score of the game result
 	 */
 	finish : function(score) {

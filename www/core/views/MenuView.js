@@ -26,7 +26,7 @@ var MenuView = new Class( /** @lends MenuView.prototype */ {
 	 */
 	draw: function () {
 
-		// Call helper functionsthe to draw components
+		// Call helper functions to draw components
 		this.drawTitle();
 		this.drawHomeButton();
 		this.drawArrows();
