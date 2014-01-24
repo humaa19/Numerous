@@ -986,13 +986,11 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		var starsImage = null;
 		var starsCount = 0;
 		
-		//ga('send', 'event', 'doneButton', 'click', score);
-		
 		// calculate time spent on level - sends but doesn't show up on site...
 		this.endTime = new Date().getTime();
 		this.timeSpent = this.endTime - this.startTime;
 		console.log("Time calculated: " + this.timeSpent);
-		ga('send', 'timing', 'latency', 'levelNo', this.timeSpent);
+		//ga('send', 'timing', 'latency', 'levelNo', this.timeSpent);
 		
 		switch(score) {
 			case 0:
@@ -1125,8 +1123,8 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		
 		app.stage.draw();
 		
-		// set the stars
-		app.controller.achievedStars(starsCount);
+		// set the stars and time spent on the level
+		app.controller.achievedStars(starsCount, this.timeSpent);
 		
 	},
 });

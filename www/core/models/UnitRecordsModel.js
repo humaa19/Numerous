@@ -18,6 +18,17 @@ var UnitRecordsModel = new Class ( /** @lends UnitRecordsModel.prototype */ {
 	 */
 	starsEarned: [],
 	
+	//Add new parameters to be saved for each unit
+	//Latency
+	//Errors made
+	//Completed or attempted(zero stars but still an attempt made) 
+	
+	keyNameForTimes: null,
+	
+	defaultTimes: [],
+	
+	timesTaken: [],
+	
 	/**
 	 * Constructor
 	 * @param {integer} unitNumber the data will be retrieved for this unit number.
@@ -25,13 +36,16 @@ var UnitRecordsModel = new Class ( /** @lends UnitRecordsModel.prototype */ {
 	initialize: function (unitNumber) {
 		this.unitNumber = unitNumber;
 		this.keyName = "unit" + this.unitNumber + "Stars";
+		this.keyNameForTimes = "unit" + this.unitNumber + "Time"; 
 	
 		for(var i = 0; i < app.UNIT_GAMES[this.unitNumber].length; i++) {
 			this.defaultStars[i] = 0;
+			this.defaultTimes[i] = 0;
 		}
 		
-		// get the stars from the database
+		// get the stars and times from the database
 		this.starsEarned = storage.get(this.keyName, this.defaultStars);
+		this.timesTaken = storage.get(this.keyNameForTimes, this.defaultTimes);
 	},
 	
 	/**
@@ -52,6 +66,27 @@ var UnitRecordsModel = new Class ( /** @lends UnitRecordsModel.prototype */ {
 	setStars: function(gameNumber, starsCount) {
 		this.starsEarned[gameNumber] = starsCount;
 		storage.set(this.keyName, this.starsEarned);
+	},
+	
+	/**
+	 * Getter for times
+	 * @param gameNumber the time value to retrieve for this game
+	 * @returns {integer} the time taken for the particular game
+	 */
+	getTime: function(gameNumber) {
+		this.timesTaken = storage.get(this.keyNameForTimes, this.defaultTimes);
+		return this.timesTaken[gameNumber];
+	},
+	
+	/**
+	 * Setter for times
+	 * @param {integer} gameNumber the game for which the time data will be saved to
+	 * @param {integer} timeForLevel the time value to set for this game
+	 */
+	setTime: function(gameNumber, timeForLevel) {
+		console.log("The game number: " + gameNumber + " and the time saved: " + timeForLevel); 
+		this.timesTaken[gameNumber] = timeForLevel;
+		storage.set(this.keyNameForTimes, this.timesTaken);
 	},
 
 });

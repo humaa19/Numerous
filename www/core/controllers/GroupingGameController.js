@@ -220,12 +220,23 @@ var GroupingGameController = new Class ( /** @lends GroupingGameController.proto
 	 * Saves the stars achieved by the user to persistent storage
 	 * @param {integer} starsCount the number of stars achieved by the user
 	 */
-	achievedStars: function (starsCount) {
+	achievedStars: function (starsCount, timeTaken) {
 		var unitRecordsModel = new UnitRecordsModel(app.currentUnit);
 		if (unitRecordsModel.getStars(app.currentGame) < starsCount) {
 			unitRecordsModel.setStars(app.currentGame, starsCount);
 		}
+		
+		//Saving the faster time taken on the level
+		if (unitRecordsModel.getTime(app.currentGame) == 0) {
+			unitRecordsModel.setTime(app.currentGame, timeTaken);
+			
+		} else if (unitRecordsModel.getTime(app.currentGame) > timeTaken) {
+			//console.log("Time from storage: " + unitRecordsModel.getTime(app.currentGame));
+			unitRecordsModel.setTime(app.currentGame, timeTaken);
+			//console.log("Time from storage after: " + unitRecordsModel.getTime(app.currentGame));
+		}
+		console.log("Faster time stored: " + unitRecordsModel.getTime(app.currentGame));
+		
 	},
 	
 });
-

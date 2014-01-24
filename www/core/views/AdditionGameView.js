@@ -46,9 +46,6 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		this.allowableErrorsCount = 3;
 		
 		this.boxesInGroup = [];
-		
-		//WORKS! It sends and page view for every time its called!
-		//ga('send', 'pageview');
 
 	},
 
