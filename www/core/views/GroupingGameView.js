@@ -54,10 +54,19 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		this.onesWidgetGroup = new Kinetic.Group({});
 		app.layer.add(this.onesWidgetGroup);
 		
-		//Timing variables
+		// Amount of time spent on the level 
 		this.startTime = new Date().getTime();
 		this.endTime = 0;
 		this.timeSpent = 0;
+		this.pauseTime = 0;
+		this.unpauseTime = 0;
+		this.totalPausedTime = 0;
+		
+		// Number of attempts
+		this.attempts = 0;
+		
+		//Errors made in string format
+		this.errorString = null;
 	},
 	
 
@@ -292,8 +301,6 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 			var total = app.view.calculateTotal();
 			if (total == app.controller.goalNumber) {
 				app.view.finish(app.view.allowableErrorsCount - app.view.errorsMade);
-				// done button pressed event with no. of stars as event label
-				ga('send', 'event', 'doneButton', 'click', app.view.allowableErrorsCount - app.view.errorsMade);
 			} else {
 				app.view.shakeHead();
 				app.view.errorMade(app.view.ERROR_TYPES.INCORRECT_DONE);	
@@ -575,6 +582,7 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 	 * Pause the game
 	 */
 	pause : function() {
+		this.pauseTime = new Date().getTime();
 		this.pauseWidgetsGroup.show();
 		this.pauseWidgetsGroup.moveToTop();
 		app.stage.draw();
@@ -584,6 +592,7 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 	 * Upause the game
 	 */
 	unpause : function() {
+		this.unpauseTime = new Date().getTime();
 		this.pauseWidgetsGroup.hide();
 		app.stage.draw();
 	},
@@ -939,7 +948,16 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 	 */
 	errorMade : function (errorType) {
 		this.errorsMade++;
-
+		
+		if (this.errorString == null){
+			this.errorString = String(errorType);
+		}
+		else {
+			//Concatenate previous errors with new one
+			this.errorString = this.errorString + ", " + String(errorType);
+		}
+		console.log("Error saved to string: " + this.errorString);
+		
 		switch (errorType) {
 			case this.ERROR_TYPES.DRAG_TO_TENS:
 				this.displayThinkCloud("WHOOPS! This is only ONE easter egg! You need to drag this to ONES!");
@@ -986,36 +1004,37 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		var starsImage = null;
 		var starsCount = 0;
 		
-		// calculate time spent on level - sends but doesn't show up on site...
+		// calculate time spent on level
 		this.endTime = new Date().getTime();
-		this.timeSpent = this.endTime - this.startTime;
-		console.log("Time calculated: " + this.timeSpent);
-		//ga('send', 'timing', 'latency', 'levelNo', this.timeSpent);
+		this.totalPausedTime = this.unpauseTime - this.pauseTime;
+		console.log("Grouping Paused Time calculated: " + this.totalPausedTime);
+		this.timeSpent = this.endTime - this.startTime - this.totalPausedTime;
+		console.log("Grouping Time calculated: " + this.timeSpent);
 		
 		switch(score) {
 			case 0:
 				finishTitleImage = this.images.labelTryAgain;
 				starsImage = null;
 				starsCount = 0;
-				//ga('send', 'event', 'attempted', 'click', 'noStars');
+				this.attempts = 1;
 			break;
 			case 1:
 				finishTitleImage = this.images.labelGood;
 				starsImage = this.images.star1;
 				starsCount = 1;
-				//ga('send', 'event', 'completed', 'click', 'oneStar');
+				this.attempts = 1;
 			break;
 			case 2:
 				finishTitleImage = this.images.labelExcellent;
 				starsImage = this.images.star2;
 				starsCount = 2;
-				//ga('send', 'event', 'completed', 'click', 'twoStars');
+				this.attempts = 1;
 			break;			
 			case 3:
 				finishTitleImage = this.images.labelPerfect;
 				starsImage = this.images.star3;
 				starsCount = 3;
-				//ga('send', 'event', 'completed', 'click', 'threeStars');
+				this.attempts = 1;
 			break;
 		}
 
@@ -1124,7 +1143,8 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		app.stage.draw();
 		
 		// set the stars and time spent on the level
-		app.controller.achievedStars(starsCount, this.timeSpent);
+		app.controller.achievedStars(starsCount, this.timeSpent, this.attempts, this.errorString);
+		console.log("Called the achieved stars function");
 		
 	},
 });

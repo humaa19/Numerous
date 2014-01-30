@@ -26,6 +26,7 @@ var MenuUnitController = new Class( /** @lends MenuUnitController.prototype */ {
 		// variables
 		this.unitRecordsModel = new UnitRecordsModel(app.currentUnit);
 		
+		console.log("Current unit: " + app.currentUnit);
 	},
 
 	/**

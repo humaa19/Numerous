@@ -28,13 +28,5 @@
     <feature name="http://api.phonegap.com/1.0/media"/>
     <feature name="http://api.phonegap.com/1.0/network"/>
     <feature name="http://api.phonegap.com/1.0/notification"/>
-	
-	<!--Google Analytics Plugin-->
-	<feature name="GAPlugin" >
-		< param name="android-package" value="com.adobe.plugins.GAPlugin"/>
-	</feature>
-	
-	<!--Plugin preference for Phonegap Build--> 
-	<gap:plugin name="com.adobe.plugins.gaplugin" />
  
 </widget>

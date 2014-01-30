@@ -180,13 +180,16 @@ var GroupingGame2Controller = new Class ( /** @lends GroupingGame2Controller.pro
 		
 		app.stage.draw();
 		speechUtil.sayNumber(this.goalNumber);
+		
+		console.log("Starting grouping controller 2");
+		
 	},
 
 	/**
 	 * Destructor
 	 */
 	finalize: function() {
-		
+		console.log("Done with Grouping game controller 2");
 	},
 	
 	/**
@@ -222,11 +225,38 @@ var GroupingGame2Controller = new Class ( /** @lends GroupingGame2Controller.pro
 	 * Saves the stars achieved by the user to persistent storage
 	 * @param {integer} starsCount the number of stars achieved by the user
 	 */
-	achievedStars: function (starsCount) {
+	achievedStars: function (starsCount, timeTaken, attempts, errors) {
 		var unitRecordsModel = new UnitRecordsModel(app.currentUnit);
+		var oldAttempts;
+		
 		if (unitRecordsModel.getStars(app.currentGame) < starsCount) {
 			unitRecordsModel.setStars(app.currentGame, starsCount);
 		}
+		
+		console.log("Achieved stars function in GG2C");
+		
+		//Saving the faster time taken on the level
+		if (unitRecordsModel.getTime(app.currentGame) == 0) {
+			unitRecordsModel.setTime(app.currentGame, timeTaken);
+			
+		} else if (unitRecordsModel.getTime(app.currentGame) > timeTaken) {
+			unitRecordsModel.setTime(app.currentGame, timeTaken);
+		}
+		console.log("Faster time stored: " + unitRecordsModel.getTime(app.currentGame));
+		
+		//Incrementing the attempts made
+		if (attempts == 1) {
+			oldAttempts = unitRecordsModel.getAttempts(app.currentGame);
+			unitRecordsModel.setAttempts(app.currentGame, (oldAttempts + 1) );
+		}
+		
+		console.log("Number of attempts made for this level: " + unitRecordsModel.getAttempts(app.currentGame));
+		
+		if (errors) {
+			unitRecordsModel.setErrors(app.currentGame, errors);
+			console.log("Errors made that have been saved for this level: " + unitRecordsModel.getErrors(app.currentGame));
+		}
+		
 	},
 	
 });

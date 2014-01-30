@@ -13,6 +13,18 @@ var PracticeView = new Class( /** @lends PracticeView.prototype */ {
 		
 		this.board = {};
 		this.mistakeMadeThisRound = false;
+		
+		// Amount of time spent on the level 
+		this.startTime = new Date().getTime();
+		this.endTime = 0;
+		this.timeSpent = 0;
+		this.pauseTime = 0;
+		this.unpauseTime = 0;
+		this.totalPausedTime = 0;
+		
+		// Number of attempts
+		this.attempts = 0;
+
 	},
 	
 	/**
@@ -422,7 +434,7 @@ var PracticeView = new Class( /** @lends PracticeView.prototype */ {
 	},
 	
 	/**
-	 * Finsih the game. Score: 0 for fail, 1 to 3 for stars
+	 * Finish the game. Score: 0 for fail, 1 to 3 for stars
 	 * @param {integer} score is the rank of the game
 	 */
 	finish: function(score) {
@@ -430,26 +442,37 @@ var PracticeView = new Class( /** @lends PracticeView.prototype */ {
 		var starsImage = null;
 		var starsCount = 0;
 		
+		// calculate time spent on level
+		this.endTime = new Date().getTime();
+		this.totalPausedTime = this.unpauseTime - this.pauseTime;
+		console.log("Addition Paused Time calculated: " + this.totalPausedTime);
+		this.timeSpent = this.endTime - this.startTime - this.totalPausedTime;
+		console.log("Addition Time calculated: " + this.timeSpent);
+		
 		switch(score) {
 			case 0:
 				finishTitleImage = this.images.labelTryAgain;
 				starsImage = null;
 				starsCount = 0;
+				this.attempts = 1;
 			break;
 			case 1:
 				finishTitleImage = this.images.labelGood;
 				starsImage = this.images.star1;
 				starsCount = 1;
+				this.attempts = 1;
 			break;
 			case 2:
 				finishTitleImage = this.images.labelExcellent;
 				starsImage = this.images.star2;
 				starsCount = 2;
+				this.attempts = 1;
 			break;			
 			case 3:
 				finishTitleImage = this.images.labelPerfect;
 				starsImage = this.images.star3;
 				starsCount = 3;
+				this.attempts = 1;
 			break;
 		}
 
@@ -548,7 +571,7 @@ var PracticeView = new Class( /** @lends PracticeView.prototype */ {
 		app.stage.draw();
 		
 		// set the stars
-		app.controller.achievedStars(starsCount);
+		app.controller.achievedStars(starsCount, this.timeSpent, this.attempts);
 		
 	},
 
@@ -655,6 +678,7 @@ var PracticeView = new Class( /** @lends PracticeView.prototype */ {
 	 * Pause the game
 	 */
 	pause: function() {
+		this.pauseTime = new Date().getTime();
 		this.pauseWidgetsGroup.show();
 		this.pauseWidgetsGroup.moveToTop();
 		app.stage.draw();
@@ -664,6 +688,7 @@ var PracticeView = new Class( /** @lends PracticeView.prototype */ {
 	 * Unpause the game
 	 */
 	unpause: function() {
+		this.unpauseTime = new Date().getTime();
 		this.pauseWidgetsGroup.hide();
 		app.stage.draw();
 	},

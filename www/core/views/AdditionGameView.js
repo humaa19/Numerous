@@ -46,6 +46,20 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		this.allowableErrorsCount = 3;
 		
 		this.boxesInGroup = [];
+		
+		// Amount of time spent on the level 
+		this.startTime = new Date().getTime();
+		this.endTime = 0;
+		this.timeSpent = 0;
+		this.pauseTime = 0;
+		this.unpauseTime = 0;
+		this.totalPausedTime = 0;
+		
+		// Number of attempts
+		this.attempts = 0;
+		
+		//Errors made in string format
+		this.errorString = null;
 
 	},
 
@@ -839,6 +853,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 	 * Pause the game
 	 */
 	pause : function() {
+		this.pauseTime = new Date().getTime();
 		this.pauseWidgetsGroup.show();
 		this.pauseWidgetsGroup.moveToTop();
 		app.stage.draw();
@@ -848,6 +863,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 	 * unpause the game
 	 */
 	unpause : function() {
+		this.unpauseTime = new Date().getTime();
 		this.pauseWidgetsGroup.hide();
 		app.stage.draw();
 	},
@@ -858,6 +874,15 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 	 */
 	errorMade : function (errorType) {
 		this.errorsCount++;
+		
+		if (this.errorString == null){
+			this.errorString = String(errorType);
+		}
+		else {
+			//Concatenate previous errors with new one
+			this.errorString = this.errorString + ", " + String(errorType);
+		}
+		console.log("Error saved to string: " + this.errorString);
 
 		switch (errorType) {
 			case this.ERROR_TYPES.DRAG_EGG_TO_TENS:
@@ -894,26 +919,37 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		var starsImage = null;
 		var starsCount = 0;
 		
+		// calculate time spent on level
+		this.endTime = new Date().getTime();
+		this.totalPausedTime = this.unpauseTime - this.pauseTime;
+		console.log("Addition Paused Time calculated: " + this.totalPausedTime);
+		this.timeSpent = this.endTime - this.startTime - this.totalPausedTime;
+		console.log("Addition Time calculated: " + this.timeSpent);
+		
 		switch(score) {
 			case 0:
 				finishTitleImage = this.images.labelTryAgain;
 				starsImage = null;
 				starsCount = 0;
+				this.attempts = 1;
 			break;
 			case 1:
 				finishTitleImage = this.images.labelGood;
 				starsImage = this.images.star1;
 				starsCount = 1;
+				this.attempts = 1;
 			break;
 			case 2:
 				finishTitleImage = this.images.labelExcellent;
 				starsImage = this.images.star2;
 				starsCount = 2;
+				this.attempts = 1;
 			break;			
 			case 3:
 				finishTitleImage = this.images.labelPerfect;
 				starsImage = this.images.star3;
 				starsCount = 3;
+				this.attempts = 1;
 			break;
 		}
 
@@ -1020,9 +1056,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		app.stage.draw();
 		
 		// set the stars
-		app.controller.achievedStars(starsCount);
-		
-		
+		app.controller.achievedStars(starsCount, this.timeSpent, this.attempts, this.errorString);
 		
 	},
 

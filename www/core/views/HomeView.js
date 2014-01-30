@@ -21,7 +21,6 @@ var HomeView = new Class( /** @lends HomeView.prototype */ {
 	 * Destructor
 	 */
 	finalize: function () {
-		ga('send', 'event', 'playButton', 'click');
 	},
 	
 	/**
