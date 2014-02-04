@@ -445,9 +445,7 @@ var PracticeView = new Class( /** @lends PracticeView.prototype */ {
 		// calculate time spent on level
 		this.endTime = new Date().getTime();
 		this.totalPausedTime = this.unpauseTime - this.pauseTime;
-		console.log("Addition Paused Time calculated: " + this.totalPausedTime);
 		this.timeSpent = this.endTime - this.startTime - this.totalPausedTime;
-		console.log("Addition Time calculated: " + this.timeSpent);
 		
 		switch(score) {
 			case 0:
@@ -570,8 +568,8 @@ var PracticeView = new Class( /** @lends PracticeView.prototype */ {
 		
 		app.stage.draw();
 		
-		// set the stars
-		app.controller.achievedStars(starsCount, this.timeSpent, this.attempts);
+		// set the stars, time and attempts
+		app.controller.saveStatistics(starsCount, this.timeSpent, this.attempts);
 		
 	},
 

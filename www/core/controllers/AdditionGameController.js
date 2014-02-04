@@ -73,7 +73,7 @@ var AdditionGameController = new Class( /** @lends AdditionGameController.protot
 		this.view.setSounds(this.sounds);
 		
 		
-		// currentGame veriable may be directly converted into difficulty
+		// currentGame variable may be directly converted into difficulty
 		var q = additionGameHelper.generateQuestion(app.currentGame);
 		this.goalNumber = q.left;
 		this.goalNumber2 = q.right;
@@ -191,8 +191,6 @@ var AdditionGameController = new Class( /** @lends AdditionGameController.protot
 		
 		app.view.viewVars.boxLocation = {x: 0.28, y: 0.23};
 
-
-		
 		
 		// complements
 		app.view.viewVars.compliments = [
@@ -288,18 +286,19 @@ var AdditionGameController = new Class( /** @lends AdditionGameController.protot
 	},
 
 	/**
-	 * Saves the stars achieved by the user to persistent storage
+	 * Saves the statistics for the user to persistent storage
 	 * @param {integer} starsCount the number of stars achieved by the user
+	 * @param {integer} timeTaken the amount of time taken by the user to complete the level
+	 * @param {integer} attempts whether an attempt has been made or not on the level
+	 * @param {String} errors the errors made by the user in string form
 	 */
-	achievedStars: function (starsCount, timeTaken, attempts, errors) {
+	saveStatistics: function (starsCount, timeTaken, attempts, errors) {
 		var unitRecordsModel = new UnitRecordsModel(app.currentUnit);
 		var oldAttempts;
 		
 		if (unitRecordsModel.getStars(app.currentGame) < starsCount) {
 			unitRecordsModel.setStars(app.currentGame, starsCount);
 		}
-		
-		console.log("Achieved stars function in GGC");
 		
 		//Saving the faster time taken on the level
 		if (unitRecordsModel.getTime(app.currentGame) == 0) {
@@ -308,7 +307,6 @@ var AdditionGameController = new Class( /** @lends AdditionGameController.protot
 		} else if (unitRecordsModel.getTime(app.currentGame) > timeTaken) {
 			unitRecordsModel.setTime(app.currentGame, timeTaken);
 		}
-		console.log("Faster time stored: " + unitRecordsModel.getTime(app.currentGame));
 		
 		//Incrementing the attempts made
 		if (attempts == 1) {
@@ -316,11 +314,9 @@ var AdditionGameController = new Class( /** @lends AdditionGameController.protot
 			unitRecordsModel.setAttempts(app.currentGame, (oldAttempts + 1) );
 		}
 		
-		console.log("Number of attempts made for this level: " + unitRecordsModel.getAttempts(app.currentGame));
-		
+		//Saving errors, if any were made on the level
 		if (errors) {
 			unitRecordsModel.setErrors(app.currentGame, errors);
-			console.log("Errors made that have been saved for this level: " + unitRecordsModel.getErrors(app.currentGame));
 		}
 	},
 	

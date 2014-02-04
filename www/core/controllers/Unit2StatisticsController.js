@@ -8,20 +8,18 @@ var Unit2StatisticsController = new Class ( /** @lends Unit2StatisticsController
 	 */
 	initialize: function () {
 
+		this.currentUnit = 1;
+		
 		// Images. These will automatically be loaded
 		this.images = {};
 		this.images.buttonBack = "images/menu_unit1/button_back.png";
 		this.images.blackBoard = "images/grouping_game/practice/black_board.png";
-		this.images.stars = [];
-		for(var i = 0; i < 4; i++) {
-			this.images.stars[i] = "images/menu_unit1/star" + i + ".png";
-		}
+		this.images.statisticsHeading = "images/options_screen/button_statistics.png";
+		this.images.unitLabel = "images/widgets/label_unit" + this.currentUnit + ".png";
 		
 		// Sounds
 		this.sounds = {};
 		this.sounds.select = "sounds/menu/menu_select.mp3";
-		
-		console.log("Initialise unit 2 stats controller");
 		
 	},
 
@@ -38,7 +36,9 @@ var Unit2StatisticsController = new Class ( /** @lends Unit2StatisticsController
 		
 		music.playBackgroundMusic(this.sounds.background);
 		this.view.drawButtonBack();
-		//this.view.drawStatisticsText();
+		this.view.drawTitle();
+		this.view.drawBlackBoard();
+		this.view.drawOverallStatistics();
 		app.stage.draw();
 
 	},

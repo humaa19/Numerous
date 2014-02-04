@@ -12,11 +12,6 @@ var StatisticsController = new Class ( /** @lends StatisticsController.prototype
 		this.images = {};
 		this.images.buttonBack = "images/menu_unit1/button_back.png";
 		this.images.blackBoard = "images/grouping_game/practice/black_board.png";
-		this.images.stars = [];
-		for(var i = 0; i < 4; i++) {
-			this.images.stars[i] = "images/menu_unit1/star" + i + ".png";
-		}
-		
 		this.images.unitLabels = [];
 		for(var i = 0; i < app.UNIT_GAMES.length; i++){
 			this.images.unitLabels[i] = "images/widgets/label_unit" + i + ".png";
@@ -25,8 +20,6 @@ var StatisticsController = new Class ( /** @lends StatisticsController.prototype
 		// Sounds
 		this.sounds = {};
 		this.sounds.select = "sounds/menu/menu_select.mp3";
-		
-		console.log("Initialise stats controller");
 		
 	},
 
@@ -46,8 +39,6 @@ var StatisticsController = new Class ( /** @lends StatisticsController.prototype
 		this.view.drawUnitButtons();
 		this.view.drawStatisticsText();
 		app.stage.draw();
-		
-		//this.view.calculateStatistics();
 
 	},
 

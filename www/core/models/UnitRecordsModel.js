@@ -48,12 +48,19 @@ var UnitRecordsModel = new Class ( /** @lends UnitRecordsModel.prototype */ {
 	 */
 	attemptsMade: [],
 	
-	//Errors made
-	
+	/**
+	 * Key for the key-value pair when accessing the storage for errors
+	 */
 	keyNameForErrors: null,
 	
+	/**
+	 * Stores default errors data structure if not set already
+	 */
 	defaultErrors: [],
 	
+	/**
+	 * Stores errors data loaded from the database
+	 */
 	errorsMade: [],
 	
 	/**
@@ -74,7 +81,7 @@ var UnitRecordsModel = new Class ( /** @lends UnitRecordsModel.prototype */ {
 			this.defaultErrors[i] = null;
 		}
 		
-		// get the stars, times, attempts and errors from the database
+		// Get the stars, times, attempts and errors from the database
 		this.starsEarned = storage.get(this.keyName, this.defaultStars);
 		this.timesTaken = storage.get(this.keyNameForTimes, this.defaultTimes);
 		this.attemptsMade = storage.get(this.keyNameForAttempts, this.defaultAttempts);
@@ -117,7 +124,6 @@ var UnitRecordsModel = new Class ( /** @lends UnitRecordsModel.prototype */ {
 	 * @param {integer} timeForLevel the time value to set for this game
 	 */
 	setTime: function(gameNumber, timeForLevel) {
-		console.log("The game number: " + gameNumber + " and the time saved: " + timeForLevel); 
 		this.timesTaken[gameNumber] = timeForLevel;
 		storage.set(this.keyNameForTimes, this.timesTaken);
 	},
@@ -138,7 +144,6 @@ var UnitRecordsModel = new Class ( /** @lends UnitRecordsModel.prototype */ {
 	 * @param {integer} attemptsForLevel the number of attempts made for this game
 	 */
 	setAttempts: function(gameNumber, attemptsForLevel) {
-		console.log("The game number: " + gameNumber + " and the attempts saved: " + attemptsForLevel); 
 		this.attemptsMade[gameNumber] = attemptsForLevel;
 		storage.set(this.keyNameForAttempts, this.attemptsMade);
 	},
@@ -159,7 +164,6 @@ var UnitRecordsModel = new Class ( /** @lends UnitRecordsModel.prototype */ {
 	 * @param {integer} errorsForLevel the number of errors made for this game
 	 */
 	setErrors: function(gameNumber, errorsForLevel) {
-		console.log("The game number: " + gameNumber + " and the errors saved: " + errorsForLevel); 
 		this.errorsMade[gameNumber] = errorsForLevel;
 		storage.set(this.keyNameForErrors, this.errorsMade);
 	},

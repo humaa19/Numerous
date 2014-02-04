@@ -39,7 +39,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		// Variable for controlling whether activities are enabled (should be turned off during animations)
 		this.activitiesEnabled = true;
 		
-		// number of mistakes made
+		// Number of mistakes made
 		this.errorsCount = 0;
 		
 		// Number of allowable errors
@@ -58,7 +58,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		// Number of attempts
 		this.attempts = 0;
 		
-		//Errors made in string format
+		// Errors made in string format
 		this.errorString = null;
 
 	},
@@ -184,7 +184,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 	/**
 	 * Displays a message in the think cloud
 	 * @param {string} message want to display
-	 * @param {integer} fontsize
+	 * @param {integer} font size
 	 */
 	displayThinkCloud : function(message, fontSize) {
 		if (fontSize == null) {
@@ -717,7 +717,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		});
 		wrappingTween.play();
 		
-		// animaiton: orienting the packs
+		// animation: orienting the packs
 		for(var packId = 0; packId < this.packsInGroup.length; packId++) {
 			var pack = this.packsInGroup[packId];
 			
@@ -875,14 +875,14 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 	errorMade : function (errorType) {
 		this.errorsCount++;
 		
+		// Saving the type of error made to a string
 		if (this.errorString == null){
 			this.errorString = String(errorType);
 		}
 		else {
-			//Concatenate previous errors with new one
+			// Concatenate previous errors with new one
 			this.errorString = this.errorString + ", " + String(errorType);
 		}
-		console.log("Error saved to string: " + this.errorString);
 
 		switch (errorType) {
 			case this.ERROR_TYPES.DRAG_EGG_TO_TENS:
@@ -919,12 +919,10 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		var starsImage = null;
 		var starsCount = 0;
 		
-		// calculate time spent on level
+		// Calculate time spent on level
 		this.endTime = new Date().getTime();
 		this.totalPausedTime = this.unpauseTime - this.pauseTime;
-		console.log("Addition Paused Time calculated: " + this.totalPausedTime);
 		this.timeSpent = this.endTime - this.startTime - this.totalPausedTime;
-		console.log("Addition Time calculated: " + this.timeSpent);
 		
 		switch(score) {
 			case 0:
@@ -1055,8 +1053,8 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		
 		app.stage.draw();
 		
-		// set the stars
-		app.controller.achievedStars(starsCount, this.timeSpent, this.attempts, this.errorString);
+		// set the stars, time, attempts and errors
+		app.controller.saveStatistics(starsCount, this.timeSpent, this.attempts, this.errorString);
 		
 	},
 

@@ -115,6 +115,3 @@ var MenuUnitView = new Class( /** @lends MenuUnitView.prototype */ {
 	},
 	
 });
-
-
-

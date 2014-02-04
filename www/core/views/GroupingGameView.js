@@ -44,7 +44,7 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		// timeouts to clear
 		this.timeOuts = [];
 		
-		// number of mistakes made
+		// Number of mistakes made
 		this.errorsMade = 0;
 		
 		// Number of allowable errors
@@ -65,7 +65,7 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		// Number of attempts
 		this.attempts = 0;
 		
-		//Errors made in string format
+		// Errors made in string format
 		this.errorString = null;
 	},
 	
@@ -949,14 +949,14 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 	errorMade : function (errorType) {
 		this.errorsMade++;
 		
+		// Saving the type of error made to a string
 		if (this.errorString == null){
 			this.errorString = String(errorType);
 		}
 		else {
-			//Concatenate previous errors with new one
+			// Concatenate previous errors with new one
 			this.errorString = this.errorString + ", " + String(errorType);
 		}
-		console.log("Error saved to string: " + this.errorString);
 		
 		switch (errorType) {
 			case this.ERROR_TYPES.DRAG_TO_TENS:
@@ -1004,12 +1004,10 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		var starsImage = null;
 		var starsCount = 0;
 		
-		// calculate time spent on level
+		// Calculate time spent on level
 		this.endTime = new Date().getTime();
 		this.totalPausedTime = this.unpauseTime - this.pauseTime;
-		console.log("Grouping Paused Time calculated: " + this.totalPausedTime);
 		this.timeSpent = this.endTime - this.startTime - this.totalPausedTime;
-		console.log("Grouping Time calculated: " + this.timeSpent);
 		
 		switch(score) {
 			case 0:
@@ -1142,9 +1140,8 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		
 		app.stage.draw();
 		
-		// set the stars and time spent on the level
-		app.controller.achievedStars(starsCount, this.timeSpent, this.attempts, this.errorString);
-		console.log("Called the achieved stars function");
+		// set the stars, time, attempts and errors
+		app.controller.saveStatistics(starsCount, this.timeSpent, this.attempts, this.errorString);
 		
 	},
 });

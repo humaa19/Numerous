@@ -136,7 +136,6 @@ var OptionsView = new Class ( /** @lends OptionsView.prototype */ {
 		
 		buttonStatistics.on('click tap', function () {
 			music.play(app.view.sounds.select);
-			//do something - add functionality to go to a new view and controller for statistics
 				app.controller.stats()
 		});
 		
@@ -209,13 +208,12 @@ var OptionsView = new Class ( /** @lends OptionsView.prototype */ {
 		
 		buttonReset.on('click tap', function () {
 			music.play(app.view.sounds.select);
-			//do something
+			//Deleting all the keys for the statistics
 			for(var i =0; i < app.UNIT_GAMES.length; i++) {
 				storage.deleteKey("unit" + i + "Stars");
 				storage.deleteKey("unit" + i + "Time");
 				storage.deleteKey("unit" + i + "Attempts");
 				storage.deleteKey("unit" + i + "Errors");
-				console.log("Resetting");
 			}
 		});
 		
@@ -256,4 +254,3 @@ var OptionsView = new Class ( /** @lends OptionsView.prototype */ {
 	},
 	
 });
-
