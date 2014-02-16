@@ -447,13 +447,23 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 			
 			app.layer.add(averageAttemptsText);
 			
+			//Altering the text that displays the time depending on minutes spent on the level
+			var timeText = "Average time spent on a level: " + averageTimeMin + " minutes " + averageTimeSec + " seconds";
+			
+			if (averageTimeMin == 0) {
+				timeText = "Average time spent on a level: " + averageTimeSec + " seconds";
+			}
+			else if (averageTimeMin == 1) {
+				timeText = "Average time spent on a level: " + averageTimeMin + " minute " + averageTimeSec + " seconds"
+			}
+			
 			var averageTimeText = new Kinetic.Text({
 				x: dimensionUtil.decimalToActualWidth(0.68),
 				y: dimensionUtil.decimalToActualHeight(0.37),
 				width: dimensionUtil.decimalToActualWidth(0.28 / (1/1024*dimensionUtil.width)),
 				scaleX: 1/1024*dimensionUtil.width,
 				scaleY: 1/768*dimensionUtil.height,
-				text: "Average time spent on a level: " + averageTimeMin + " minutes " + averageTimeSec + " seconds",
+				text: timeText,
 				fontSize: 25,
 				fontFamily: 'mainFont',
 				fill: 'white',
