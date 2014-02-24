@@ -13,7 +13,7 @@ var App = new Class ( /** @lends App.prototype */ {
 	},
 	
 	/**
-	 * The start function to call when all external extensions, libraries and frameworks have
+	 * The start function to call when all extenal extensions, libraries and frameworks have
 	 * finished loading.
 	 */
 	start: function () {
@@ -187,7 +187,7 @@ var App = new Class ( /** @lends App.prototype */ {
 	
 	/**
 	 * Gets the page params of the current page
-	 * @returns {object} the page parameters for the current page
+	 * @returns {object} the page paramters for the current page
 	 */
 	getCurrentPageParams: function () {
 		return app.UNIT_GAMES[app.currentUnit][app.currentGame].params;
