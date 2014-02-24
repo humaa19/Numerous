@@ -20,6 +20,7 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 			EXCEEDED_GOAL_NUMBER_WITH_PACKS : 4,
 		}	
 		
+		
 		// pack count
 		this.packCount = 0;
 		
@@ -44,7 +45,7 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		// timeouts to clear
 		this.timeOuts = [];
 		
-		// Number of mistakes made
+		// number of mistakes made
 		this.errorsMade = 0;
 		
 		// Number of allowable errors
@@ -53,20 +54,6 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		// create the egg ones group
 		this.onesWidgetGroup = new Kinetic.Group({});
 		app.layer.add(this.onesWidgetGroup);
-		
-		// Amount of time spent on the level 
-		this.startTime = new Date().getTime();
-		this.endTime = 0;
-		this.timeSpent = 0;
-		this.pauseTime = 0;
-		this.unpauseTime = 0;
-		this.totalPausedTime = 0;
-		
-		// Number of attempts
-		this.attempts = 0;
-		
-		// Errors made in string format
-		this.errorString = null;
 	},
 	
 
@@ -582,7 +569,6 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 	 * Pause the game
 	 */
 	pause : function() {
-		this.pauseTime = new Date().getTime();
 		this.pauseWidgetsGroup.show();
 		this.pauseWidgetsGroup.moveToTop();
 		app.stage.draw();
@@ -592,7 +578,6 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 	 * Upause the game
 	 */
 	unpause : function() {
-		this.unpauseTime = new Date().getTime();
 		this.pauseWidgetsGroup.hide();
 		app.stage.draw();
 	},
@@ -948,16 +933,7 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 	 */
 	errorMade : function (errorType) {
 		this.errorsMade++;
-		
-		// Saving the type of error made to a string
-		if (this.errorString == null){
-			this.errorString = String(errorType);
-		}
-		else {
-			// Concatenate previous errors with new one
-			this.errorString = this.errorString + ", " + String(errorType);
-		}
-		
+
 		switch (errorType) {
 			case this.ERROR_TYPES.DRAG_TO_TENS:
 				this.displayThinkCloud("WHOOPS! This is only ONE easter egg! You need to drag this to ONES!");
@@ -997,42 +973,33 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 	},
 
 	/**
-	 * Finish the game. Score: 0 for fail, 1 to 3 for stars
+	 * Finsih the game. Score: 0 for fail, 1 to 3 for stars
 	 */
 	finish : function(score) {
 		var finishTitleImage = null;
 		var starsImage = null;
 		var starsCount = 0;
 		
-		// Calculate time spent on level
-		this.endTime = new Date().getTime();
-		this.totalPausedTime = this.unpauseTime - this.pauseTime;
-		this.timeSpent = this.endTime - this.startTime - this.totalPausedTime;
-		
 		switch(score) {
 			case 0:
 				finishTitleImage = this.images.labelTryAgain;
 				starsImage = null;
 				starsCount = 0;
-				this.attempts = 1;
 			break;
 			case 1:
 				finishTitleImage = this.images.labelGood;
 				starsImage = this.images.star1;
 				starsCount = 1;
-				this.attempts = 1;
 			break;
 			case 2:
 				finishTitleImage = this.images.labelExcellent;
 				starsImage = this.images.star2;
 				starsCount = 2;
-				this.attempts = 1;
 			break;			
 			case 3:
 				finishTitleImage = this.images.labelPerfect;
 				starsImage = this.images.star3;
 				starsCount = 3;
-				this.attempts = 1;
 			break;
 		}
 
@@ -1140,8 +1107,10 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		
 		app.stage.draw();
 		
-		// set the stars, time, attempts and errors
-		app.controller.saveStatistics(starsCount, this.timeSpent, this.attempts, this.errorString);
+		// set the stars
+		app.controller.achievedStars(starsCount);
+		
+		
 		
 	},
 });
