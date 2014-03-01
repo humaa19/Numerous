@@ -34,7 +34,7 @@ var MenuUnitView = new Class( /** @lends MenuUnitView.prototype */ {
 	},
 
 	/**
-	 * Draw the bcack button
+	 * Draw the back button
 	 */
 	drawButtonBack: function() {
 		var	buttonBack = new Kinetic.Image({image: this.images.buttonBack});
@@ -115,6 +115,3 @@ var MenuUnitView = new Class( /** @lends MenuUnitView.prototype */ {
 	},
 	
 });
-
-
-

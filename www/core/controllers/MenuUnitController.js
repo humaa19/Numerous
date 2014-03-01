@@ -25,7 +25,7 @@ var MenuUnitController = new Class( /** @lends MenuUnitController.prototype */ {
 		this.sounds.select = "sounds/menu/menu_select.mp3";
 		// variables
 		this.unitRecordsModel = new UnitRecordsModel(app.currentUnit);
-		
+	
 	},
 
 	/**

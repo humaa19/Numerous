@@ -99,10 +99,3 @@ var HomeView = new Class( /** @lends HomeView.prototype */ {
 	},
 
 });
-
-
-
-
-
-
-

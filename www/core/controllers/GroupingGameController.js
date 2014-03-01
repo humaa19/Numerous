@@ -178,12 +178,14 @@ var GroupingGameController = new Class ( /** @lends GroupingGameController.proto
 		
 		app.stage.draw();
 		speechUtil.sayNumber(this.goalNumber);
+		
 	},
 
 	/**
 	 * Destructor
 	 */
 	finalize: function() {
+		
 	},
 	
 	/**
@@ -217,15 +219,39 @@ var GroupingGameController = new Class ( /** @lends GroupingGameController.proto
 	},
 
 	/**
-	 * Saves the stars achieved by the user to persistent storage
+	 * Saves the statistics for the user to persistent storage
 	 * @param {integer} starsCount the number of stars achieved by the user
+	 * @param {integer} timeTaken the amount of time taken by the user to complete the level
+	 * @param {integer} attempts whether an attempt has been made or not on the level
+	 * @param {String} errors the errors made by the user in string form
 	 */
-	achievedStars: function (starsCount) {
+	saveStatistics: function (starsCount, timeTaken, attempts, errors) {
 		var unitRecordsModel = new UnitRecordsModel(app.currentUnit);
+		var oldAttempts;
+		
 		if (unitRecordsModel.getStars(app.currentGame) < starsCount) {
 			unitRecordsModel.setStars(app.currentGame, starsCount);
 		}
+		
+		//Saving the faster time taken on the level
+		if (unitRecordsModel.getTime(app.currentGame) == 0) {
+			unitRecordsModel.setTime(app.currentGame, timeTaken);
+			
+		} else if (unitRecordsModel.getTime(app.currentGame) > timeTaken) {
+			unitRecordsModel.setTime(app.currentGame, timeTaken);
+		}
+		
+		//Incrementing the attempts made
+		if (attempts == 1) {
+			oldAttempts = unitRecordsModel.getAttempts(app.currentGame);
+			unitRecordsModel.setAttempts(app.currentGame, (oldAttempts + 1) );
+		}
+		
+		//Saving errors, if any were made on the level
+		if (errors) {
+			unitRecordsModel.setErrors(app.currentGame, errors);
+		}
+		
 	},
 	
 });
-

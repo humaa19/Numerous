@@ -136,8 +136,7 @@ var OptionsView = new Class ( /** @lends OptionsView.prototype */ {
 		
 		buttonStatistics.on('click tap', function () {
 			music.play(app.view.sounds.select);
-			//do something
-				
+				app.controller.stats()
 		});
 		
 		var buttonLock = new Kinetic.Image({image: this.images.buttonLock});
@@ -209,9 +208,12 @@ var OptionsView = new Class ( /** @lends OptionsView.prototype */ {
 		
 		buttonReset.on('click tap', function () {
 			music.play(app.view.sounds.select);
-			//do something
+			//Deleting all the keys for the statistics
 			for(var i =0; i < app.UNIT_GAMES.length; i++) {
 				storage.deleteKey("unit" + i + "Stars");
+				storage.deleteKey("unit" + i + "Time");
+				storage.deleteKey("unit" + i + "Attempts");
+				storage.deleteKey("unit" + i + "Errors");
 			}
 		});
 		
@@ -252,4 +254,3 @@ var OptionsView = new Class ( /** @lends OptionsView.prototype */ {
 	},
 	
 });
-

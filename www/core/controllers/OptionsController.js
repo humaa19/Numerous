@@ -77,6 +77,13 @@ var OptionsController = new Class( /** @lends OptionsController.prototype */ {
 	home: function () {
 		app.route("Home");
 	},
+	
+	/**
+	 * Navigate to the statistics page
+	 */
+	stats: function () {
+		app.route("Statistics");
+	},
 
 	/**
 	 * Destructor

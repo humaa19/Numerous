@@ -4,12 +4,12 @@
 var View = new Class ( /** @lends View.prototype */ {
 	
 	/**
-	 * {object} to hold resources of all image resouces belonging to a view
+	 * {object} to hold resources of all image resources belonging to a view
 	 */
 	images: null,
 	
 	/**
-	 * {object} to hold resources of all sounds resouces belonging to a view
+	 * {object} to hold resources of all sounds resources belonging to a view
 	 */
 	sounds: null,
 	

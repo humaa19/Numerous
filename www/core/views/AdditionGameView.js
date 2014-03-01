@@ -39,13 +39,28 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		// Variable for controlling whether activities are enabled (should be turned off during animations)
 		this.activitiesEnabled = true;
 		
-		// number of mistakes made
+		// Number of mistakes made
 		this.errorsCount = 0;
 		
 		// Number of allowable errors
 		this.allowableErrorsCount = 3;
 		
 		this.boxesInGroup = [];
+		
+		// Amount of time spent on the level 
+		this.startTime = new Date().getTime();
+		this.endTime = 0;
+		this.timeSpent = 0;
+		this.pauseTime = 0;
+		this.unpauseTime = 0;
+		this.totalPausedTime = 0;
+		
+		// Number of attempts
+		this.attempts = 0;
+		
+		// Errors made in string format
+		this.errorString = null;
+
 	},
 
 
@@ -169,7 +184,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 	/**
 	 * Displays a message in the think cloud
 	 * @param {string} message want to display
-	 * @param {integer} fontsize
+	 * @param {integer} font size
 	 */
 	displayThinkCloud : function(message, fontSize) {
 		if (fontSize == null) {
@@ -702,7 +717,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		});
 		wrappingTween.play();
 		
-		// animaiton: orienting the packs
+		// animation: orienting the packs
 		for(var packId = 0; packId < this.packsInGroup.length; packId++) {
 			var pack = this.packsInGroup[packId];
 			
@@ -838,15 +853,17 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 	 * Pause the game
 	 */
 	pause : function() {
+		this.pauseTime = new Date().getTime();
 		this.pauseWidgetsGroup.show();
 		this.pauseWidgetsGroup.moveToTop();
 		app.stage.draw();
 	},
 
 	/**
-	 * upause the game
+	 * unpause the game
 	 */
 	unpause : function() {
+		this.unpauseTime = new Date().getTime();
 		this.pauseWidgetsGroup.hide();
 		app.stage.draw();
 	},
@@ -857,6 +874,15 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 	 */
 	errorMade : function (errorType) {
 		this.errorsCount++;
+		
+		// Saving the type of error made to a string
+		if (this.errorString == null){
+			this.errorString = String(errorType);
+		}
+		else {
+			// Concatenate previous errors with new one
+			this.errorString = this.errorString + ", " + String(errorType);
+		}
 
 		switch (errorType) {
 			case this.ERROR_TYPES.DRAG_EGG_TO_TENS:
@@ -885,7 +911,7 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 	},
 
 	/**
-	 * Finsih the game. Score: 0 for fail, 1 to 3 for stars
+	 * Finish the game. Score: 0 for fail, 1 to 3 for stars
 	 * @param {integer} score the score of the game result
 	 */
 	finish : function(score) {
@@ -893,26 +919,35 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		var starsImage = null;
 		var starsCount = 0;
 		
+		// Calculate time spent on level
+		this.endTime = new Date().getTime();
+		this.totalPausedTime = this.unpauseTime - this.pauseTime;
+		this.timeSpent = this.endTime - this.startTime - this.totalPausedTime;
+		
 		switch(score) {
 			case 0:
 				finishTitleImage = this.images.labelTryAgain;
 				starsImage = null;
 				starsCount = 0;
+				this.attempts = 1;
 			break;
 			case 1:
 				finishTitleImage = this.images.labelGood;
 				starsImage = this.images.star1;
 				starsCount = 1;
+				this.attempts = 1;
 			break;
 			case 2:
 				finishTitleImage = this.images.labelExcellent;
 				starsImage = this.images.star2;
 				starsCount = 2;
+				this.attempts = 1;
 			break;			
 			case 3:
 				finishTitleImage = this.images.labelPerfect;
 				starsImage = this.images.star3;
 				starsCount = 3;
+				this.attempts = 1;
 			break;
 		}
 
@@ -1018,10 +1053,8 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		
 		app.stage.draw();
 		
-		// set the stars
-		app.controller.achievedStars(starsCount);
-		
-		
+		// set the stars, time, attempts and errors
+		app.controller.saveStatistics(starsCount, this.timeSpent, this.attempts, this.errorString);
 		
 	},
 
