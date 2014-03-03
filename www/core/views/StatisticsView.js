@@ -52,7 +52,6 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 		app.layer.add(buttonBack);
 		
 		buttonBack.on('click tap', function () {
-			music.play(app.view.sounds.select);
 			app.controller.back();
 		});
 	},
@@ -72,7 +71,6 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 		app.layer.add(unit1Button);
 		
 		unit1Button.on('click tap', function () {
-			music.play(app.view.sounds.select);
 			app.controller.unitOne();
 		});
 		
@@ -86,7 +84,6 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 		app.layer.add(unit2Button);
 		
 		unit2Button.on('click tap', function () {
-			music.play(app.view.sounds.select);
 			app.controller.unitTwo();
 		});
 		
@@ -100,7 +97,6 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 		app.layer.add(unit3Button);
 		
 		unit3Button.on('click tap', function () {
-			music.play(app.view.sounds.select);
 			app.controller.unitThree();
 		});
 		

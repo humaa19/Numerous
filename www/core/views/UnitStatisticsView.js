@@ -57,7 +57,6 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 		app.layer.add(buttonBack);
 		
 		buttonBack.on('click tap', function () {
-			music.play(app.view.sounds.select);
 			app.controller.back();
 		});
 	},

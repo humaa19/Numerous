@@ -17,10 +17,6 @@ var Unit2StatisticsController = new Class ( /** @lends Unit2StatisticsController
 		this.images.statisticsHeading = "images/options_screen/button_statistics.png";
 		this.images.unitLabel = "images/widgets/label_unit" + this.currentUnit + ".png";
 		
-		// Sounds
-		this.sounds = {};
-		this.sounds.select = "sounds/menu/menu_select.mp3";
-		
 	},
 
 	/**
@@ -32,9 +28,7 @@ var Unit2StatisticsController = new Class ( /** @lends Unit2StatisticsController
 		app.view = this.view;
 		
 		this.view.setImages(this.images);
-		this.view.setSounds(this.sounds);
 		
-		music.playBackgroundMusic(this.sounds.background);
 		this.view.drawButtonBack();
 		this.view.drawTitle();
 		this.view.drawBlackBoard();
