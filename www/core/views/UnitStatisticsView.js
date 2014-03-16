@@ -20,7 +20,6 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 		this.percent2Stars = 0;
 		this.percent3Stars = 0;
 		this.percentAttempted = 0;
-		this.percentNotAttempted = 0;
 		this.averageAttempts = 0;
 		this.averageTime = 0;
 		this.practiseAttempts = 0;
@@ -167,11 +166,6 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 			this.percentAttempted = Math.round((numberAttempted/totalNumberOfGames)*100);
 		}
 		
-		if (numberNotAttempted != 0) {
-			this.percentNotAttempted = Math.round((numberNotAttempted/totalNumberOfGames)*100);
-		}
-		
-		
 		var errorsForLevel;
 		var errorTypes = new Array();
 		errorTypes[0] = 0; //dragToTens //Grouping and Addition: 0
@@ -195,77 +189,29 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 				//Errors for grouping games
 				if (app.controller.currentUnit == 0 ||  app.controller.currentUnit == 1) {
 				
-					if (errorsForLevel.search("0") != -1){
-						errorTypes[0]++;
-						this.totalErrors++;
-					}
-					if (errorsForLevel.search("1") != -1){
-						errorTypes[1]++;
-						this.totalErrors++;
-					}
-					if (errorsForLevel.search("2") != -1){
-						errorTypes[2]++;
-						this.totalErrors++;
-					}
-					if (errorsForLevel.search("3") != -1){
-						errorTypes[3]++;
-						this.totalErrors++;
-					}
-					if (errorsForLevel.search("4") != -1){
-						errorTypes[4]++;
-						this.totalErrors++;
-					}
+					this.dragToTens = this.dragToTens + (errorsForLevel.split("0").length - 1);
+					this.incorrectDone = this.incorrectDone + (errorsForLevel.split("1").length - 1);
+					this.exceededGoalWithEggs = this.exceededGoalWithEggs + (errorsForLevel.split("2").length - 1);
+					this.packDragToOnes = this.packDragToOnes + (errorsForLevel.split("3").length - 1);
+					this.exceededGoalWithPacks = this.exceededGoalWithPacks + (errorsForLevel.split("4").length - 1);
+					
 				}
 				
 				//Errors for addition games
 				if (app.controller.currentUnit == 2) {
 				
-					if (errorsForLevel.search("0") != -1){
-						errorTypes[0]++;
-						this.totalErrors++;
-					}
-					if (errorsForLevel.search("1") != -1){
-						errorTypes[5]++;
-						this.totalErrors++;
-					}
-					if (errorsForLevel.search("2") != -1){
-						errorTypes[3]++;
-						this.totalErrors++;
-					}
-					if (errorsForLevel.search("3") != -1){
-						errorTypes[6]++;
-						this.totalErrors++;
-					}
-					if (errorsForLevel.search("4") != -1){
-						errorTypes[1]++;
-						this.totalErrors++;
-					}
+					this.dragToTens = this.dragToTens + (errorsForLevel.split("0").length - 1);
+					this.dragEggToHundreds = this.dragEggToHundreds + (errorsForLevel.split("1").length - 1);
+					this.packDragToOnes = this.packDragToOnes + (errorsForLevel.split("2").length - 1);
+					this.dragPackToHundreds = this.dragPackToHundreds + (errorsForLevel.split("3").length - 1);
+					this.incorrectDone = this.incorrectDone + (errorsForLevel.split("4").length - 1);
+					
 				}
 			}
 		}
 		
-		//Calculate percentages of each error type
-		if (errorTypes[0] != 0) {
-			this.dragToTens = Math.round((errorTypes[0]/this.totalErrors)*100)
-		}
-		if (errorTypes[1] != 0) {
-			this.incorrectDone = Math.round((errorTypes[1]/this.totalErrors)*100)
-		}
-		if (errorTypes[2] != 0) {
-			this.exceededGoalWithEggs = Math.round((errorTypes[2]/this.totalErrors)*100)
-		}
-		if (errorTypes[3] != 0) {
-			this.packDragToOnes = Math.round((errorTypes[3]/this.totalErrors)*100)
-		}
-		if (errorTypes[4] != 0) {
-			this.exceededGoalWithPacks = Math.round((errorTypes[4]/this.totalErrors)*100)
-		}
-		if (errorTypes[5] != 0) {
-			this.dragEggToHundreds = Math.round((errorTypes[5]/this.totalErrors)*100)
-		}
-		if (errorTypes[6] != 0) {
-			this.dragPackToHundreds = Math.round((errorTypes[6]/this.totalErrors)*100)
-		}
+		//Calculating the total errors made
+		this.totalErrors = this.dragToTens + this.incorrectDone + this.exceededGoalWithEggs + this.packDragToOnes + this.exceededGoalWithPacks + this.dragPackToHundreds + this.dragEggToHundreds;
 		
 		//Number of mistakes made in the practise question
 		this.practiseMistakes = unitRecordsModel.getErrors(app.UNIT_GAMES[app.controller.currentUnit].length - 1);
@@ -347,10 +293,10 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 			var attemptsText = new Kinetic.Text({
 				x: dimensionUtil.decimalToActualWidth(0.16),
 				y: dimensionUtil.decimalToActualHeight(0.57),
-				width: dimensionUtil.decimalToActualWidth(0.4 / (1/1024*dimensionUtil.width)),
+				width: dimensionUtil.decimalToActualWidth(0.25 / (1/1024*dimensionUtil.width)),
 				scaleX: 1/1024*dimensionUtil.width,
 				scaleY: 1/768*dimensionUtil.height,
-				text: this.percentAttempted + "% Just attempted",
+				text: this.percentAttempted + "% Attempted, but not          complete",
 				fontSize: 25,
 				fontFamily: 'mainFont',
 				fill: 'white',
@@ -359,28 +305,13 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 			
 			app.layer.add(attemptsText);
 			
-			var notAttemptedText = new Kinetic.Text({
-				x: dimensionUtil.decimalToActualWidth(0.16),
-				y: dimensionUtil.decimalToActualHeight(0.61),
-				width: dimensionUtil.decimalToActualWidth(0.4 / (1/1024*dimensionUtil.width)),
-				scaleX: 1/1024*dimensionUtil.width,
-				scaleY: 1/768*dimensionUtil.height,
-				text: this.percentNotAttempted + "% Not attempted",
-				fontSize: 25,
-				fontFamily: 'mainFont',
-				fill: 'white',
-				align: 'left'
-			});
-			
-			app.layer.add(notAttemptedText);
-			
 			var averageAttemptsText = new Kinetic.Text({
 				x: dimensionUtil.decimalToActualWidth(0.16),
 				y: dimensionUtil.decimalToActualHeight(0.65),
-				width: dimensionUtil.decimalToActualWidth(0.4 / (1/1024*dimensionUtil.width)),
+				width: dimensionUtil.decimalToActualWidth(0.25 / (1/1024*dimensionUtil.width)),
 				scaleX: 1/1024*dimensionUtil.width,
 				scaleY: 1/768*dimensionUtil.height,
-				text: "Average no. of attempts: " + this.averageAttempts,
+				text: "Average no. of attempts per level:  " + this.averageAttempts,
 				fontSize: 25,
 				fontFamily: 'mainFont',
 				fill: 'white',
@@ -390,18 +321,18 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 			app.layer.add(averageAttemptsText);
 			
 			//Altering the text that displays the time depending on minutes spent on the level
-			var timeText = "Average time spent on a level: " + averageTimeMin + " minutes " + averageTimeSec + " seconds";
+			var timeText = "Average time spent on a level:  " + averageTimeMin + " minutes " + averageTimeSec + " seconds";
 			
 			if (averageTimeMin == 0) {
-				timeText = "Average time spent on a level: " + averageTimeSec + " seconds";
+				timeText = "Average time spent on a level:  " + averageTimeSec + " seconds";
 			}
 			else if (averageTimeMin == 1) {
-				timeText = "Average time spent on a level: " + averageTimeMin + " minute " + averageTimeSec + " seconds"
+				timeText = "Average time spent on a level:  " + averageTimeMin + " minute " + averageTimeSec + " seconds"
 			}
 			
 			var averageTimeText = new Kinetic.Text({
 				x: dimensionUtil.decimalToActualWidth(0.16),
-				y: dimensionUtil.decimalToActualHeight(0.70),
+				y: dimensionUtil.decimalToActualHeight(0.73),
 				width: dimensionUtil.decimalToActualWidth(0.30 / (1/1024*dimensionUtil.width)),
 				scaleX: 1/1024*dimensionUtil.width,
 				scaleY: 1/768*dimensionUtil.height,
@@ -418,11 +349,11 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 			if (this.practiseAttempts != 0) { 
 				var practiseMistakesText = new Kinetic.Text({
 					x: dimensionUtil.decimalToActualWidth(0.16),
-					y: dimensionUtil.decimalToActualHeight(0.78),
+					y: dimensionUtil.decimalToActualHeight(0.81),
 					width: dimensionUtil.decimalToActualWidth(0.30 / (1/1024*dimensionUtil.width)),
 					scaleX: 1/1024*dimensionUtil.width,
 					scaleY: 1/768*dimensionUtil.height,
-					text: "Number of mistakes made on the practise level: " + this.practiseMistakes ,
+					text: "Number of mistakes made on the practise level:  " + this.practiseMistakes ,
 					fontSize: 25,
 					fontFamily: 'mainFont',
 					fill: 'white',
@@ -432,7 +363,7 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 			else {
 				var practiseMistakesText = new Kinetic.Text({
 					x: dimensionUtil.decimalToActualWidth(0.16),
-					y: dimensionUtil.decimalToActualHeight(0.78),
+					y: dimensionUtil.decimalToActualHeight(0.81),
 					width: dimensionUtil.decimalToActualWidth(0.30 / (1/1024*dimensionUtil.width)),
 					scaleX: 1/1024*dimensionUtil.width,
 					scaleY: 1/768*dimensionUtil.height,
@@ -456,7 +387,7 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 					width: dimensionUtil.decimalToActualWidth(0.32 / (1/1024*dimensionUtil.width)),
 					scaleX: 1/1024*dimensionUtil.width,
 					scaleY: 1/768*dimensionUtil.height,
-					text: "Total errors made: " + this.totalErrors,
+					text: "Total errors made:  " + this.totalErrors,
 					fontSize: 25,
 					fontFamily: 'mainFont',
 					fill: 'white',
@@ -465,28 +396,13 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 				
 				app.layer.add(totalErrorText);
 				
-				var incorrectDoneText = new Kinetic.Text({
-					x: dimensionUtil.decimalToActualWidth(0.52),
-					y: dimensionUtil.decimalToActualHeight(0.42),
-					width: dimensionUtil.decimalToActualWidth(0.30 / (1/1024*dimensionUtil.width)),
-					scaleX: 1/1024*dimensionUtil.width,
-					scaleY: 1/768*dimensionUtil.height,
-					text: "Incorrect number done, goal not reached: " + this.incorrectDone + "%",
-					fontSize: 25,
-					fontFamily: 'mainFont',
-					fill: 'white',
-					align: 'left'
-				});
-				
-				app.layer.add(incorrectDoneText);
-				
 				var dragToTensText = new Kinetic.Text({
 					x: dimensionUtil.decimalToActualWidth(0.52),
-					y: dimensionUtil.decimalToActualHeight(0.49),
-					width: dimensionUtil.decimalToActualWidth(0.30 / (1/1024*dimensionUtil.width)),
+					y: dimensionUtil.decimalToActualHeight(0.42),
+					width: dimensionUtil.decimalToActualWidth(0.32 / (1/1024*dimensionUtil.width)),
 					scaleX: 1/1024*dimensionUtil.width,
 					scaleY: 1/768*dimensionUtil.height,
-					text: "Dragging an egg to the tens: " + this.dragToTens + "%",
+					text: "Dragging an egg to the tens:  " + this.dragToTens,
 					fontSize: 25,
 					fontFamily: 'mainFont',
 					fill: 'white',
@@ -497,11 +413,11 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 				
 				var packDragToOnesText = new Kinetic.Text({
 					x: dimensionUtil.decimalToActualWidth(0.52),
-					y: dimensionUtil.decimalToActualHeight(0.56),
-					width: dimensionUtil.decimalToActualWidth(0.30 / (1/1024*dimensionUtil.width)),
+					y: dimensionUtil.decimalToActualHeight(0.46),
+					width: dimensionUtil.decimalToActualWidth(0.32 / (1/1024*dimensionUtil.width)),
 					scaleX: 1/1024*dimensionUtil.width,
 					scaleY: 1/768*dimensionUtil.height,
-					text: "Dragging a pack to the ones: " + this.packDragToOnes + "%",
+					text: "Dragging a pack to the ones:  " + this.packDragToOnes,
 					fontSize: 25,
 					fontFamily: 'mainFont',
 					fill: 'white',
@@ -510,16 +426,31 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 				
 				app.layer.add(packDragToOnesText);
 				
+				var incorrectDoneText = new Kinetic.Text({
+					x: dimensionUtil.decimalToActualWidth(0.52),
+					y: dimensionUtil.decimalToActualHeight(0.50),
+					width: dimensionUtil.decimalToActualWidth(0.32 / (1/1024*dimensionUtil.width)),
+					scaleX: 1/1024*dimensionUtil.width,
+					scaleY: 1/768*dimensionUtil.height,
+					text: "Goal number of eggs not reached:  " + this.incorrectDone,
+					fontSize: 25,
+					fontFamily: 'mainFont',
+					fill: 'white',
+					align: 'left'
+				});
+				
+				app.layer.add(incorrectDoneText);
+				
 				//Errors specific to the unit only displayed
 				if (app.controller.currentUnit == 0 || app.controller.currentUnit == 1){
 					
 					var exceededGoalWithEggsText = new Kinetic.Text({
 						x: dimensionUtil.decimalToActualWidth(0.52),
-						y: dimensionUtil.decimalToActualHeight(0.63),
-						width: dimensionUtil.decimalToActualWidth(0.30 / (1/1024*dimensionUtil.width)),
+						y: dimensionUtil.decimalToActualHeight(0.57),
+						width: dimensionUtil.decimalToActualWidth(0.32 / (1/1024*dimensionUtil.width)),
 						scaleX: 1/1024*dimensionUtil.width,
 						scaleY: 1/768*dimensionUtil.height,
-						text: "Goal number exceeded with number of eggs: " + this.exceededGoalWithEggs + "%",
+						text: "Number of eggs exceeded:  " + this.exceededGoalWithEggs,
 						fontSize: 25,
 						fontFamily: 'mainFont',
 						fill: 'white',
@@ -530,11 +461,11 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 					
 					var exceededGoalWithPacksText = new Kinetic.Text({
 						x: dimensionUtil.decimalToActualWidth(0.52),
-						y: dimensionUtil.decimalToActualHeight(0.70),
-						width: dimensionUtil.decimalToActualWidth(0.30 / (1/1024*dimensionUtil.width)),
+						y: dimensionUtil.decimalToActualHeight(0.61),
+						width: dimensionUtil.decimalToActualWidth(0.32 / (1/1024*dimensionUtil.width)),
 						scaleX: 1/1024*dimensionUtil.width,
 						scaleY: 1/768*dimensionUtil.height,
-						text: "Exceeded goal number with number of packs: " + this.exceededGoalWithPacks + "%",
+						text: "Number of packs exceeded:  " + this.exceededGoalWithPacks,
 						fontSize: 25,
 						fontFamily: 'mainFont',
 						fill: 'white',
@@ -548,11 +479,11 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 					
 					var dragEggToHundredsText = new Kinetic.Text({
 						x: dimensionUtil.decimalToActualWidth(0.52),
-						y: dimensionUtil.decimalToActualHeight(0.63),
-						width: dimensionUtil.decimalToActualWidth(0.30 / (1/1024*dimensionUtil.width)),
+						y: dimensionUtil.decimalToActualHeight(0.57),
+						width: dimensionUtil.decimalToActualWidth(0.32 / (1/1024*dimensionUtil.width)),
 						scaleX: 1/1024*dimensionUtil.width,
 						scaleY: 1/768*dimensionUtil.height,
-						text: "Dragging an egg to the hundreds: " + this.dragEggToHundreds + "%",
+						text: "Dragging an egg to the hundreds:  " + this.dragEggToHundreds,
 						fontSize: 25,
 						fontFamily: 'mainFont',
 						fill: 'white',
@@ -563,11 +494,11 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 					
 					var dragPackToHundredsText = new Kinetic.Text({
 						x: dimensionUtil.decimalToActualWidth(0.52),
-						y: dimensionUtil.decimalToActualHeight(0.70),
-						width: dimensionUtil.decimalToActualWidth(0.30 / (1/1024*dimensionUtil.width)),
+						y: dimensionUtil.decimalToActualHeight(0.64),
+						width: dimensionUtil.decimalToActualWidth(0.32 / (1/1024*dimensionUtil.width)),
 						scaleX: 1/1024*dimensionUtil.width,
 						scaleY: 1/768*dimensionUtil.height,
-						text: "Dragging a pack to the hundreds: " + this.dragPackToHundreds + "%",
+						text: "Dragging a pack to the hundreds:  " + this.dragPackToHundreds,
 						fontSize: 25,
 						fontFamily: 'mainFont',
 						fill: 'white',

@@ -694,7 +694,7 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 				// dropped it in correct location (so far so good)
 				
 				if (app.view.viewVars.usePacks) {
-					// using packs (so eggs should not exceed the goalnumber's ones
+					// using packs (so eggs should not exceed the goal number's ones
 					if (parseInt(app.view.onesTextWidget.getText()) < mathUtil.getOnes(app.controller.goalNumber)) {
 						egg.setScale(1, 1);
 						app.view.acceptEgg(this);
@@ -1035,6 +1035,9 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 				this.attempts = 1;
 			break;
 		}
+		
+		// set the stars, time, attempts and errors
+		app.controller.saveStatistics(starsCount, this.timeSpent, this.attempts, this.errorString);
 
 		// draw overlay
 		var overlay = new Kinetic.Rect({
@@ -1139,9 +1142,6 @@ var GroupingGameView = new Class ( /** @lends GroupingGameView.prototype */ {
 		app.layer.add(buttonRetry);	
 		
 		app.stage.draw();
-		
-		// set the stars, time, attempts and errors
-		app.controller.saveStatistics(starsCount, this.timeSpent, this.attempts, this.errorString);
 		
 	},
 });

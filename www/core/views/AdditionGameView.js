@@ -950,6 +950,9 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 				this.attempts = 1;
 			break;
 		}
+		
+		// set the stars, time, attempts and errors
+		app.controller.saveStatistics(starsCount, this.timeSpent, this.attempts, this.errorString);
 
 		// draw overlay
 		var overlay = new Kinetic.Rect({
@@ -1052,9 +1055,6 @@ var AdditionGameView = new Class ( /** @lends AdditionGameView.prototype */ {
 		app.layer.add(buttonRetry);	
 		
 		app.stage.draw();
-		
-		// set the stars, time, attempts and errors
-		app.controller.saveStatistics(starsCount, this.timeSpent, this.attempts, this.errorString);
 		
 	},
 

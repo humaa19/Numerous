@@ -23,7 +23,6 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 		this.percent2Stars = 0;
 		this.percent3Stars = 0;
 		this.percentAttempted = 0;
-		this.percentNotAttempted = 0;
 		this.averageAttempts = 0;
 		this.averageTime = 0;
 		this.maxErrorString = null;
@@ -185,11 +184,6 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 			this.percentAttempted = Math.round((numberAttempted/totalNumberOfGames)*100);
 		}
 		
-		if (numberNotAttempted != 0) {
-			this.percentNotAttempted = Math.round((numberNotAttempted/totalNumberOfGames)*100);
-		}
-		
-		
 		var errorsForLevel;
 		var totalErrors = 0;
 		var errorTypes = new Array();
@@ -214,55 +208,30 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 					//Errors for grouping games
 					if (i == 0 ||  i == 1) {
 					
-						if (errorsForLevel.search("0") != -1){
-							errorTypes[0]++;
-							totalErrors++
-						}
-						if (errorsForLevel.search("1") != -1){
-							errorTypes[1]++;
-							totalErrors++;
-						}
-						if (errorsForLevel.search("2") != -1){
-							errorTypes[2]++;
-							totalErrors++;
-						}
-						if (errorsForLevel.search("3") != -1){
-							errorTypes[3]++;
-							totalErrors++;
-						}
-						if (errorsForLevel.search("4") != -1){
-							errorTypes[4]++;
-							totalErrors++;
-						}
+						errorTypes[0] = errorTypes[0] + errorsForLevel.split("0").length - 1;
+						errorTypes[1] = errorTypes[1] + errorsForLevel.split("1").length - 1;
+						errorTypes[2] = errorTypes[2] + errorsForLevel.split("2").length - 1;
+						errorTypes[3] = errorTypes[3] + errorsForLevel.split("3").length - 1;
+						errorTypes[4] = errorTypes[4] + errorsForLevel.split("4").length - 1;
+					
 					}
 					
 					//Errors for addition games
 					if (i == 2) {
 					
-						if (errorsForLevel.search("0") != -1){
-							errorTypes[0]++;
-							totalErrors++
-						}
-						if (errorsForLevel.search("1") != -1){
-							errorTypes[5]++;
-							totalErrors++;
-						}
-						if (errorsForLevel.search("2") != -1){
-							errorTypes[3]++;
-							totalErrors++;
-						}
-						if (errorsForLevel.search("3") != -1){
-							errorTypes[6]++;
-							totalErrors++;
-						}
-						if (errorsForLevel.search("4") != -1){
-							errorTypes[1]++;
-							totalErrors++;
-						}
+						errorTypes[0] = errorTypes[0] + (errorsForLevel.split("0").length - 1);
+						errorTypes[5] = errorTypes[5] + (errorsForLevel.split("1").length - 1);
+						errorTypes[3] = errorTypes[3] + (errorsForLevel.split("2").length - 1);
+						errorTypes[6] = errorTypes[6] + (errorsForLevel.split("3").length - 1);
+						errorTypes[1] = errorTypes[1] + (errorsForLevel.split("4").length - 1);
+						
 					}
 				}
 			}
 		}
+		
+		//Calculating the total errors made
+		this.totalErrors = errorTypes[0] + errorTypes[1] + errorTypes[2] + errorTypes[3] + errorTypes[4] + errorTypes[5] + errorTypes[6];
 		
 		//Finding the most frequent error made overall
 		var maxNumberOfErrors = errorTypes[0];
@@ -287,7 +256,7 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 			this.maxErrorString = "Most frequent error made: Exceeded the goal number with the number of eggs";
 		}
 		else if (maxErrorType == 3) {
-			this.maxErrorString = "Most frequent error made: Dragging an egg to the tens section";
+			this.maxErrorString = "Most frequent error made: Dragging a pack to the ones section";
 		}
 		else if (maxErrorType == 4) {
 			this.maxErrorString = "Most frequent error made: Exceeded the goal number with the number of packs";
@@ -401,10 +370,10 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 			var attemptsText = new Kinetic.Text({
 				x: dimensionUtil.decimalToActualWidth(0.42),
 				y: dimensionUtil.decimalToActualHeight(0.56),
-				width: dimensionUtil.decimalToActualWidth(0.4 / (1/1024*dimensionUtil.width)),
+				width: dimensionUtil.decimalToActualWidth(0.25/ (1/1024*dimensionUtil.width)),
 				scaleX: 1/1024*dimensionUtil.width,
 				scaleY: 1/768*dimensionUtil.height,
-				text: this.percentAttempted + "% Just attempted",
+				text: this.percentAttempted + "% Attempted, but not          complete",
 				fontSize: 25,
 				fontFamily: 'mainFont',
 				fill: 'white',
@@ -413,28 +382,13 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 			
 			app.layer.add(attemptsText);
 			
-			var notAttemptedText = new Kinetic.Text({
-				x: dimensionUtil.decimalToActualWidth(0.42),
-				y: dimensionUtil.decimalToActualHeight(0.60),
-				width: dimensionUtil.decimalToActualWidth(0.4 / (1/1024*dimensionUtil.width)),
-				scaleX: 1/1024*dimensionUtil.width,
-				scaleY: 1/768*dimensionUtil.height,
-				text: this.percentNotAttempted + "% Not attempted",
-				fontSize: 25,
-				fontFamily: 'mainFont',
-				fill: 'white',
-				align: 'left'
-			});
-			
-			app.layer.add(notAttemptedText);
-			
 			var averageAttemptsText = new Kinetic.Text({
 				x: dimensionUtil.decimalToActualWidth(0.42),
 				y: dimensionUtil.decimalToActualHeight(0.64),
-				width: dimensionUtil.decimalToActualWidth(0.4 / (1/1024*dimensionUtil.width)),
+				width: dimensionUtil.decimalToActualWidth(0.25 / (1/1024*dimensionUtil.width)),
 				scaleX: 1/1024*dimensionUtil.width,
 				scaleY: 1/768*dimensionUtil.height,
-				text: "Average no. of attempts: " + this.averageAttempts,
+				text: "Average no. of attempts per level:  " + this.averageAttempts,
 				fontSize: 25,
 				fontFamily: 'mainFont',
 				fill: 'white',
@@ -444,13 +398,13 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 			app.layer.add(averageAttemptsText);
 			
 			//Altering the text that displays the time depending on minutes spent on the level
-			var timeText = "Average time spent on a level: " + averageTimeMin + " minutes " + averageTimeSec + " seconds";
+			var timeText = "Average time spent on a level:  " + averageTimeMin + " minutes " + averageTimeSec + " seconds";
 			
 			if (averageTimeMin == 0) {
-				timeText = "Average time spent on a level: " + averageTimeSec + " seconds";
+				timeText = "Average time spent on a level:  " + averageTimeSec + " seconds";
 			}
 			else if (averageTimeMin == 1) {
-				timeText = "Average time spent on a level: " + averageTimeMin + " minute " + averageTimeSec + " seconds"
+				timeText = "Average time spent on a level:  " + averageTimeMin + " minute " + averageTimeSec + " seconds"
 			}
 			
 			var averageTimeText = new Kinetic.Text({
