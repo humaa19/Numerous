@@ -113,7 +113,6 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 		var totalTime = 0;
 		
 		//Retrieving statistics from persistent storage for each level
-		
 		unitRecordsModel = new UnitRecordsModel(app.controller.currentUnit);
 	
 		for (var j=0; j < app.UNIT_GAMES[app.controller.currentUnit].length; j++) {
@@ -164,6 +163,8 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 		
 		if (numberAttempted != 0) {
 			this.percentAttempted = Math.round((numberAttempted/totalNumberOfGames)*100);
+			this.averageAttempts = Math.round((totalAttempts/(numberAttempted)));
+			this.averageTime = Math.round((totalTime/(numberAttempted)));
 		}
 		
 		var errorsForLevel;
@@ -225,7 +226,7 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 		var averageTimeMin = Math.floor(this.averageTime/60000);
 		var averageTimeSec = Math.round(((this.averageTime - averageTimeMin*60000)/1000))
 		
-		if (this.averageAttempts != 0) {
+		if (this.averageAttempts != 0|| this.percentAttempted !=0) {
 		
 			//Displaying text for completion statistics
 			var completeText = new Kinetic.Text({

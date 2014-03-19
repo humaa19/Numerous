@@ -182,6 +182,8 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 		
 		if (numberAttempted != 0) {
 			this.percentAttempted = Math.round((numberAttempted/totalNumberOfGames)*100);
+			this.averageAttempts = Math.round((totalAttempts/(numberAttempted)));
+			this.averageTime = Math.round((totalTime/(numberAttempted)));
 		}
 		
 		var errorsForLevel;
@@ -305,7 +307,7 @@ var StatisticsView = new Class( /** @lends StatisticsView.prototype */ {
 		app.layer.add(title);
 		
 		//Only displays statistics if there are any to display
-		if (this.averageAttempts != 0) {
+		if (this.averageAttempts != 0 || this.percentAttempted !=0) {
 		
 			var completeText = new Kinetic.Text({
 				x: dimensionUtil.decimalToActualWidth(0.42),
