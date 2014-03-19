@@ -158,10 +158,11 @@ var UnitStatisticsView = new Class( /** @lends UnitStatisticsView.prototype */ {
 			this.percent2Stars = Math.round((numberWith2Stars/numberComplete)*100);
 			this.percent3Stars =  Math.round((numberWith3Stars/numberComplete)*100);
 			this.averageTime = Math.round((totalTime/(numberComplete+numberAttempted)));
+			this.percentAttempted = Math.round((numberAttempted/totalNumberOfGames)*100);
 			this.averageAttempts = Math.round((totalAttempts/(numberComplete+numberAttempted)));
 		}
 		
-		if (numberAttempted != 0) {
+		else if (numberAttempted != 0) {
 			this.percentAttempted = Math.round((numberAttempted/totalNumberOfGames)*100);
 			this.averageAttempts = Math.round((totalAttempts/(numberAttempted)));
 			this.averageTime = Math.round((totalTime/(numberAttempted)));
