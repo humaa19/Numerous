@@ -295,6 +295,7 @@ var AdditionGameController = new Class( /** @lends AdditionGameController.protot
 	saveStatistics: function (starsCount, timeTaken, attempts, errors) {
 		var unitRecordsModel = new UnitRecordsModel(app.currentUnit);
 		var oldAttempts;
+		var oldErrors;
 		
 		if (unitRecordsModel.getStars(app.currentGame) < starsCount) {
 			unitRecordsModel.setStars(app.currentGame, starsCount);
@@ -316,7 +317,9 @@ var AdditionGameController = new Class( /** @lends AdditionGameController.protot
 		
 		//Saving errors, if any were made on the level
 		if (errors) {
-			unitRecordsModel.setErrors(app.currentGame, errors);
+			//Add errors to any previous errors made
+			oldErrors = unitRecordsModel.getErrors(app.currentGame);
+			unitRecordsModel.setErrors(app.currentGame, (oldErrors + errors));
 		}
 	},
 	

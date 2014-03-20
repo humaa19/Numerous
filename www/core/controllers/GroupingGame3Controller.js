@@ -253,6 +253,7 @@ var GroupingGame3Controller = new Class( /** @lends GroupingGame3Controller.prot
 	saveStatistics: function (starsCount, timeTaken, attempts, errors) {
 		var unitRecordsModel = new UnitRecordsModel(app.currentUnit);
 		var oldAttempts;
+		var oldErrors;
 		
 		if (unitRecordsModel.getStars(app.currentGame) < starsCount) {
 			unitRecordsModel.setStars(app.currentGame, starsCount);
@@ -274,7 +275,9 @@ var GroupingGame3Controller = new Class( /** @lends GroupingGame3Controller.prot
 		
 		//Saving errors, if any were made on the level
 		if (errors) {
-			unitRecordsModel.setErrors(app.currentGame, errors);
+			//Add errors to any previous errors made
+			oldErrors = unitRecordsModel.getErrors(app.currentGame);
+			unitRecordsModel.setErrors(app.currentGame, (oldErrors + errors));
 		}
 	},
 	
